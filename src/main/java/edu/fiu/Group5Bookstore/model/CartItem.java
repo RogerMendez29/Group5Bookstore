@@ -21,7 +21,7 @@ public class CartItem {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public CartItem(Long id, Book book, int quantity, double price, User user) {
+    public CartItem(int id, Book book, int quantity, double price, User user) {
         this.id = id;
         this.book = book;
         this.quantity = quantity;
