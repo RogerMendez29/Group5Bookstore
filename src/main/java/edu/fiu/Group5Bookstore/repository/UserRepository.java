@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface UserRepository extends JpaRepository <User, Integer> {
 
-    List<User> findByUserId(Integer userId);
+    List<User> findByid(Integer userId);
 }
