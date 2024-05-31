@@ -27,10 +27,15 @@ public class CartItemController {
     }
 
     @GetMapping("/subtotal/{userID}")
-    public ResponseEntity<Double> getSubTotal(@PathVariable int userID) {
-        User foundUser = userService.findUser(userID);
-        double totalSubtotal = cartService.getTotalSubtotal(foundUser);
-        return new ResponseEntity<>(totalSubtotal, HttpStatus.OK);
+    public ResponseEntity<Double> getSubTotal(@PathVariable String userID) {
+        User foundUser = userService.findUser(Integer.parseInt(userID));
+
+        System.out.println(foundUser.getId());
+        List<CartItem> cartItems = cartService.getCartItemsByUserId(foundUser.getId());
+
+        System.out.println("Cart items here"+cartItems);
+        double grandTotal = cartService.getGrandTotal(cartItems);
+        return new ResponseEntity<>(grandTotal, HttpStatus.OK);
     }
     @PostMapping
     public ResponseEntity<CartItem> createCartItem(@RequestBody int bookID, int userID) {
@@ -43,7 +48,7 @@ public class CartItemController {
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<CartItem>> getUsersCart(@PathVariable int userID) {
         User foundUser = userService.findUser(userID);
-        List<CartItem> cartItems = cartService.getCartItemsByUserId(foundUser);
+        List<CartItem> cartItems = cartService.getCartItemsByUserId(foundUser.getId());
         return new ResponseEntity<>(cartItems, HttpStatus.OK);
     }
 

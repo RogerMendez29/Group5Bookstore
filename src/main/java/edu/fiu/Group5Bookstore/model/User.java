@@ -24,4 +24,22 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<CartItem> cartItems = new ArrayList<>();
 
+    public User() {
+    }
+
+    public User(int id, String username, String password, List<CartItem> cartItems) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.cartItems = cartItems;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }
