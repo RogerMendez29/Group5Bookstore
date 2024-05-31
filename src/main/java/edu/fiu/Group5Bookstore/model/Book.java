@@ -18,10 +18,27 @@ public class Book {
     private String author;
     private String isbn;
 
-    public Book(int id, String title, String author, String isbn) {
+    private double price;
+
+    public Book() {
+    }
+
+    public Book(int id, String title, String author, String isbn, double price) {
         this.id = id;
         this.title = title;
         this.author = author;
         this.isbn = isbn;
+        this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                ", isbn='" + isbn + '\'' +
+                ", price=" + price +
+                '}';
     }
 }
