@@ -48,8 +48,8 @@ public class CartItemController {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<CartItem>> getUsersCart(@PathVariable int userID) {
-        User foundUser = userService.findUser(userID);
+    public ResponseEntity<List<CartItem>> getUsersCart(@PathVariable int userId) {
+        User foundUser = userService.findUser(userId);
         List<CartItem> cartItems = cartService.getCartItemsByUserId(foundUser.getId());
         return new ResponseEntity<>(cartItems, HttpStatus.OK);
     }

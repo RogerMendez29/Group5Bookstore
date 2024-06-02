@@ -24,7 +24,7 @@ public class CartService {
         double subtotal = 0.0;
 
         for ( CartItem item :list) {
-           subtotal += item.getPrice();
+           subtotal += item.getTotalPrice();
         }
         return subtotal;
     }
@@ -32,7 +32,7 @@ public class CartService {
     public CartItem createCartItem(Book book, User user, int quantity) {
         CartItem newCartItem = new CartItem();
         newCartItem.setBook(book);
-        newCartItem.setPrice(book.getPrice());
+        newCartItem.setTotalPrice(book.getPrice() * quantity);
         newCartItem.setUser(user);
         newCartItem.setQuantity(quantity);
 
