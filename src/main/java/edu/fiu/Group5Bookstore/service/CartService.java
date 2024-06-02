@@ -26,12 +26,19 @@ public class CartService {
         for ( CartItem item :list) {
            subtotal += item.getPrice();
         }
-
         return subtotal;
     }
 
-    public CartItem createCartItem(Book bookID, User userID) {
-        return null;
+    public CartItem createCartItem(Book book, User user, int quantity) {
+        CartItem newCartItem = new CartItem();
+        newCartItem.setBook(book);
+        newCartItem.setPrice(book.getPrice());
+        newCartItem.setUser(user);
+        newCartItem.setQuantity(quantity);
+
+        cartItemRepository.save(newCartItem);
+
+        return newCartItem;
     }
 
     public void deleteCartItem(User foundUser, Book foundBook) {
