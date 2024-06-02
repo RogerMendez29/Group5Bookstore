@@ -27,7 +27,7 @@ public class CartItem {
     @JsonIgnoreProperties({"cartItems"}) // Exclude cartItems field from serialization
     private User user;
     private int quantity;
-    private double price;
+    private double totalPrice;
 
 
     public CartItem() {
@@ -37,7 +37,7 @@ public class CartItem {
         this.id = id;
         this.book = book;
         this.quantity = quantity;
-        this.price = price;
+        this.totalPrice = price;
         this.user = user;
     }
 
@@ -47,7 +47,7 @@ public class CartItem {
                 "id=" + id +
                 ", book= " + book.getId() +": " +book.getTitle() +
                 ", quantity=" + quantity +
-                ", price=" + price +
+                ", price=" + totalPrice +
                 ", user=" + user.getId()+": "+ user +
                 '}';
     }
