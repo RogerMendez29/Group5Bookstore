@@ -33,12 +33,12 @@ public class CartItem {
     public CartItem() {
     }
 
-    public CartItem(int id, Book book, int quantity, double price, User user) {
+    public CartItem(int id, Book book, User user, int quantity, double totalPrice) {
         this.id = id;
         this.book = book;
-        this.quantity = quantity;
-        this.totalPrice = price;
         this.user = user;
+        this.quantity = quantity;
+        this.totalPrice = totalPrice;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class CartItem {
                 "id=" + id +
                 ", book= " + book.getId() +": " +book.getTitle() +
                 ", quantity=" + quantity +
-                ", price=" + totalPrice +
+                ", totalPrice=" + totalPrice +
                 ", user=" + user.getId()+": "+ user +
                 '}';
     }

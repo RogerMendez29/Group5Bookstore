@@ -54,16 +54,14 @@ public class CartItemController {
         return new ResponseEntity<>(cartItems, HttpStatus.OK);
     }
 
-    @DeleteMapping("delete/{userID}/{bookID}")
-    public ResponseEntity<Void> deleteCartItem(@PathVariable int userID,@PathVariable int bookID ) {
-        User foundUser = userService.findUser(userID);
-        Book foundBook = bookService.findBook(bookID);
-        cartService.deleteCartItem(foundUser,foundBook);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    @DeleteMapping("/delete/user/{userId}/book/{bookId}")
+    public ResponseEntity<String> deleteCartItem(@PathVariable int userId,@PathVariable int bookId ) {
+        cartService.deleteCartItem(userId,bookId);
+        Book foundBook = bookService.findBook(bookId);
+        String responseMsg = "Cart item for user " + userId + " and book '" + foundBook.getTitle() + "' (Id: " + bookId + ") was deleted successfully.";
+        return ResponseEntity.ok(responseMsg);
+
     }
-
-
-
 
 
 }
