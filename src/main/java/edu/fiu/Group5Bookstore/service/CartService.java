@@ -7,8 +7,13 @@ import edu.fiu.Group5Bookstore.repository.CartItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
-
 import java.util.List;
+
+/**
+ * This service class handles all the logic associated with a cart item entity.
+ * To help with some common database methods like inserting & deleting we are using Spring Data JPA
+ * Spring Data JPA abstracts away many common database query's & operations, so we don't need to write any SQL for most cases.
+ */
 
 @Service
 public class CartService {
@@ -31,15 +36,22 @@ public class CartService {
     }
 
     public CartItem createCartItem(Book book, User user, int quantity) {
+        CartItem itemFound = cartItemRepository.findCartItemByUserAndBook(user, book);
         CartItem newCartItem = new CartItem();
-        newCartItem.setBook(book);
-        newCartItem.setTotalPrice(book.getPrice() * quantity);
-        newCartItem.setUser(user);
-        newCartItem.setQuantity(quantity);
 
-        cartItemRepository.save(newCartItem);
-
-        return newCartItem;
+        if (itemFound == null){
+            newCartItem.setBook(book);
+            newCartItem.setTotalPrice(book.getPrice() * quantity);
+            newCartItem.setUser(user);
+            newCartItem.setQuantity(quantity);
+            cartItemRepository.save(newCartItem);
+            return newCartItem;
+        }else {
+            itemFound.setQuantity(itemFound.getQuantity() + quantity);
+            itemFound.setTotalPrice(itemFound.getQuantity() * book.getPrice());
+            cartItemRepository.save(itemFound);
+            return itemFound;
+        }
     }
 
     public void deleteCartItem(int userId, int bookId) {
