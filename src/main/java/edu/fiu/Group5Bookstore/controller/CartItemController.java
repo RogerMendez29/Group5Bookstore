@@ -1,5 +1,6 @@
 package edu.fiu.Group5Bookstore.controller;
 
+import edu.fiu.Group5Bookstore.DTOs.CartItemPostDTO;
 import edu.fiu.Group5Bookstore.model.Book;
 import edu.fiu.Group5Bookstore.model.CartItem;
 import edu.fiu.Group5Bookstore.model.User;
@@ -30,19 +31,20 @@ public class CartItemController {
     public ResponseEntity<Double> getSubTotal(@PathVariable String userID) {
         User foundUser = userService.findUser(Integer.parseInt(userID));
 
-        System.out.println(foundUser.getId());
         List<CartItem> cartItems = cartService.getCartItemsByUserId(foundUser.getId());
 
         System.out.println("Cart items here"+cartItems);
         double grandTotal = cartService.getGrandTotal(cartItems);
         return new ResponseEntity<>(grandTotal, HttpStatus.OK);
     }
-    @PostMapping
-    public ResponseEntity<CartItem> createCartItem(@RequestBody int bookID, int userID) {
-        User foundUser = userService.findUser(userID);
-        Book foundBook = BookService.findBook(bookID);
-        CartItem createdCartItem = cartService.createCartItem(foundBook,foundUser);
-        return new ResponseEntity<>(createdCartItem, HttpStatus.CREATED);
+    @PostMapping("/addToCart")
+    public ResponseEntity<CartItem> createCartItem(@RequestBody CartItemPostDTO cartItemPostDTO) {
+        User foundUser = userService.findUser(cartItemPostDTO.getUserId());
+        Book foundBook = bookService.findBook(cartItemPostDTO.getBookId());
+        CartItem createdCartItem = cartService.createCartItem(foundBook,foundUser, cartItemPostDTO.getQuantity());
+
+         return new ResponseEntity<CartItem>(createdCartItem, HttpStatus.OK);
+
     }
 
     @GetMapping("/user/{userId}")
@@ -55,7 +57,7 @@ public class CartItemController {
     @DeleteMapping("delete/{userID}/{bookID}")
     public ResponseEntity<Void> deleteCartItem(@PathVariable int userID,@PathVariable int bookID ) {
         User foundUser = userService.findUser(userID);
-        Book foundBook = BookService.findBook(bookID);
+        Book foundBook = bookService.findBook(bookID);
         cartService.deleteCartItem(foundUser,foundBook);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

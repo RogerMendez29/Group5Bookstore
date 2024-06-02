@@ -1,10 +1,16 @@
 package edu.fiu.Group5Bookstore.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * An entity of this class represents a single user
+ * The annotation JsonIgnore was used here to prevent the password from being serialized in the response object
+ */
 
 @Entity
 @Data
@@ -19,6 +25,7 @@ public class User {
     @Column(name = "Username")
     private String username;
     @Column(name = "Password")
+    @JsonIgnore
     private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
