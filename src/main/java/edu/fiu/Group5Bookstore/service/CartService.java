@@ -6,6 +6,7 @@ import edu.fiu.Group5Bookstore.model.User;
 import edu.fiu.Group5Bookstore.repository.CartItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -41,6 +42,13 @@ public class CartService {
         return newCartItem;
     }
 
-    public void deleteCartItem(User foundUser, Book foundBook) {
+    public void deleteCartItem(int userId, int bookId) {
+        List<CartItem> listOfItems = getCartItemsByUserId(userId);
+        int foundCartItemId= 0;
+
+        for (CartItem item : listOfItems) {
+            if (item.getId() == bookId) foundCartItemId = item.getId();
+        }
+        cartItemRepository.deleteById(foundCartItemId);
     }
 }

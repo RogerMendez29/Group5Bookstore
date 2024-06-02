@@ -22,9 +22,9 @@ INSERT INTO Book_StoreDB.user (Username, Password) VALUES
 ('kevin_davis', 'password9'),
 ('amanda_taylor', 'password10');
 
-INSERT INTO Book_StoreDB.cart_item (Book_ID, Quantity, Price, User_ID) VALUES
+INSERT INTO Book_StoreDB.cart_item (Book_ID, Quantity, Total_Price, User_ID) VALUES
 (1, 2, 20.0, 1),  -- User 'john_doe' adds 2 books with ID 1 to cart
-(2, 1, 15.0, 2),  -- User 'jane_doe' adds 1 book with ID 2 to cart
+(2, 1, 30.0, 2),  -- User 'jane_doe' adds 1 book with ID 2 to cart
 (3, 1, 10.99, 1), -- User 'john_doe' adds 1 book with ID 3 to cart
 (4, 3, 35.97, 3), -- User 'alice_smith' adds 3 books with ID 4 to cart
 (5, 2, 29.98, 4), -- User 'bob_jones' adds 2 books with ID 5 to cart
