@@ -1,16 +1,19 @@
 package edu.fiu.Group5Bookstore.controller;
 
 import edu.fiu.Group5Bookstore.DTOs.CartItemPostDTO;
+import edu.fiu.Group5Bookstore.exceptions.GeneralNotFoundException;
 import edu.fiu.Group5Bookstore.model.Book;
 import edu.fiu.Group5Bookstore.model.CartItem;
 import edu.fiu.Group5Bookstore.model.User;
 import edu.fiu.Group5Bookstore.service.BookService;
 import edu.fiu.Group5Bookstore.service.CartService;
 import edu.fiu.Group5Bookstore.service.UserService;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -28,14 +31,21 @@ public class CartItemController {
     }
 
     @GetMapping("/subtotal/{userID}")
-    public ResponseEntity<Double> getSubTotal(@PathVariable String userID) {
-        User foundUser = userService.findUser(Integer.parseInt(userID));
+    public ResponseEntity<?> getSubTotal(@PathVariable String userID)  {
+        try{
+           User foundUser = userService.findUser(Integer.parseInt(userID));
+            List<CartItem> cartItems = cartService.getCartItemsByUserId(foundUser.getId());
+            double grandTotal = cartService.getGrandTotal(cartItems);
+            return new ResponseEntity<>(grandTotal, HttpStatus.OK);
 
-        List<CartItem> cartItems = cartService.getCartItemsByUserId(foundUser.getId());
+        }catch (GeneralNotFoundException exception){
+            System.out.println(Arrays.asList(exception.getStackTrace()));
+            return new ResponseEntity<>(exception.getMessage(),exception.getStatus());
 
-        System.out.println("Cart items here"+cartItems);
-        double grandTotal = cartService.getGrandTotal(cartItems);
-        return new ResponseEntity<>(grandTotal, HttpStatus.OK);
+        }
+
+
+
     }
     @PostMapping("/addToCart")
     public ResponseEntity<CartItem> createCartItem(@RequestBody CartItemPostDTO cartItemPostDTO) {
