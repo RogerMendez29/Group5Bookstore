@@ -1,13 +1,17 @@
 package edu.fiu.Group5Bookstore.controller;
 
 import edu.fiu.Group5Bookstore.model.Book;
+import edu.fiu.Group5Bookstore.model.CartItem;
+import edu.fiu.Group5Bookstore.model.User;
 import edu.fiu.Group5Bookstore.service.BookService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-
+@RestController
+@RequestMapping("/api/book")
 public class BookController {
 
     @Autowired
@@ -31,6 +35,13 @@ public class BookController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/genre/{genre}")
+    public ResponseEntity<List<Book>> getUsersCart(@PathVariable String genre) {
+        List<Book> byGenre = bookService.getBookByGenre(genre);
+        return new ResponseEntity<>(byGenre, HttpStatus.OK);
+    }
+
 
     @GetMapping
     public ResponseEntity<List<Book>> getAllBooks() {
