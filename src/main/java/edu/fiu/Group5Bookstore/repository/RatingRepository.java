@@ -1,7 +1,6 @@
 package edu.fiu.Group5Bookstore.repository;
 
-import edu.fiu.Group5Bookstore.model.CartItem;
-import edu.fiu.Group5Bookstore.model.Rating;
+import edu.fiu.Group5Bookstore.model.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,7 +10,7 @@ import java.util.List;
 public interface RatingRepository extends JpaRepository<Rating, Integer> {
     List<CartItem> findByUserId(Integer userId);
 
-    Rating findRatingByUserAndBookAndRating(Integer userId, Integer bookId, Integer rating);
+    Rating findRatingByUserAndBookAndRating(User user, Book book, Integer rating);
 }
 
 
