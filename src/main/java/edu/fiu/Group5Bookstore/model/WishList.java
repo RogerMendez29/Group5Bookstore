@@ -12,24 +12,24 @@ public class WishList {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int wishListID;
-    private User user;
-    private String name;
+    private int userId;
+    private String wishlist_name;
 
     public WishList() {
 
     }
 
-    public WishList(int wishListID, User user, String name) {
+    public WishList(int wishListID, int userId, String wishlist_name) {
         this.wishListID = wishListID;
-        this.user = user;
-        this.name = name;
+        this.userId = userId;
+        this.wishlist_name = wishlist_name;
     }
 
     @Override
     public String toString() {
         return "WishList{" +
                 "wishListID = " + wishListID +
-                ", user = " + user.getId() + ": " + user +
+                ", user = " + userId +
                 '}';
     }
 }
