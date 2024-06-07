@@ -83,3 +83,15 @@ VALUES
   ('5678567856785678', '12/24', '890'),
   ('8765876587658765', '07/22', '123'),
   ('3456345634563456', '10/25', '456');
+
+INSERT INTO Book_StoreDB.wish_lists (Wishlist_ID, User_ID, Wishlist_Name)
+VALUES
+  (1, 1, 'Wishlist 1'),
+  (2, 2, 'Wishlist 2'),
+  (3, 3, 'Wishlist 3');
+
+INSERT INTO Book_StoreDB.wish_item (Book_ID, Wishlist_ID)
+VALUES
+  (1, 1),
+  (2, 2),
+  (3, 3);
