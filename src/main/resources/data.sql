@@ -33,3 +33,16 @@ INSERT INTO Book_StoreDB.cart_item (Book_ID, Quantity, Total_Price, User_ID) VAL
 (8, 1, 15.99, 5), -- User 'carol_white' adds 1 book with ID 8 to cart
 (9, 2, 15.98, 3), -- User 'alice_smith' adds 2 books with ID 9 to cart
 (10, 1, 11.49, 4); -- User 'bob_jones' adds 1 book with ID 10 to cart
+
+INSERT INTO Book_StoreDB.author (first_Name, last_Name, bio, publisher)
+VALUES
+  ('Jane', 'Austen', 'Jane Austen was an English novelist known primarily for her six major novels.', 'Thomas Egerton'),
+  ('Mark', 'Twain', 'Mark Twain was an American writer, humorist, entrepreneur, publisher, and lecturer.', 'American Publishing Company'),
+  ('Charles', 'Dickens', 'Charles Dickens was an English writer and social critic. He created some of the world\'s best-known fictional characters.', 'Chapman & Hall'),
+  ('George', 'Orwell', 'George Orwell was an English novelist, essayist, journalist and critic. He is best known for his novels 1984 and Animal Farm.', 'Secker & Warburg'),
+  ('Fyodor', 'Dostoevsky', 'Fyodor Dostoevsky was a Russian novelist, short story writer, essayist and journalist. He is best known for Crime and Punishment.', 'The Russian Messenger'),
+  ('Herman', 'Melville', 'Herman Melville was an American novelist, short story writer, and poet of the American Renaissance period. His best known works include Moby-Dick and Bartleby, the Scrivener.', 'Harper & Brothers'),
+  ('Leo', 'Tolstoy', 'Leo Tolstoy was a Russian writer who is regarded as one of the greatest authors of all time. He is best known for War and Peace and Anna Karenina.', 'The Russian Messenger'),
+  ('J.K.', 'Rowling', 'J.K. Rowling is a British author and philanthropist. She is best known for writing the Harry Potter fantasy series.', 'Bloomsbury'),
+  ('Ernest', 'Hemingway', 'Ernest Hemingway was an American novelist, short story writer, and journalist. He won the Nobel Prize in Literature in 1954.', 'Charles Scribner\'s Sons'),
+  ('Virginia', 'Woolf', 'Virginia Woolf was an English writer and one of the foremost modernists of the twentieth century.', 'Hogarth Press');
