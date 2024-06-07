@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -22,12 +23,23 @@ public class WishController {
         this.userService = userService;
     }
 
-    @PostMapping("/create")
+    /*@PostMapping("/create")
     public ResponseEntity<String> createWishlist(@PathVariable String name, @PathVariable int userId) {
         User foundUser = userService.findUser(userId);
         WishList wl = wishService.createWishlist(name, userId);
 
         String responseMsg = "h";
         return ResponseEntity.ok(responseMsg);
+    }*/
+
+    @GetMapping("/get/{wishListID}")
+    public ResponseEntity<List<Book>> getWishlist(@PathVariable int wishListID) {
+        List<WishItem> wishItems = wishService.getWishItemsFromId(wishListID);
+        ArrayList<Book> books = new ArrayList<Book>();
+        for (WishItem w : wishItems) {
+            books.add(bookService.findBook(w.getBookId()));
+        }
+
+        return new ResponseEntity<>(books, HttpStatus.OK);
     }
 }

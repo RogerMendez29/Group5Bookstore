@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Entity
 @Data
 public class WishItem {
-    private Book book;
+
+    @Id
+    private int bookId;
 
     private int wishListID;
 
@@ -16,15 +18,16 @@ public class WishItem {
 
     }
 
-    public WishItem(Book book, int wishListID) {
-        this.book = book;
+    public WishItem(int bookId, int wishListID) {
+        this.bookId = bookId;
         this.wishListID = wishListID;
+        //wishlistID
     }
 
     @Override
     public String toString() {
         return "WishItem{" +
-                "book= " + book.getId() +": " +book.getTitle() +
+                "book= " + bookId +
                 ", wishListID = " + wishListID +
                 '}';
     }

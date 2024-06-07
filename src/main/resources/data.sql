@@ -84,7 +84,7 @@ VALUES
   ('8765876587658765', '07/22', '123'),
   ('3456345634563456', '10/25', '456');
 
-INSERT INTO Book_StoreDB.wish_lists (Wishlist_ID, User_ID, Wishlist_Name)
+INSERT INTO Book_StoreDB.wishlist (Wishlist_ID, User_ID, Wishlist_Name)
 VALUES
   (1, 1, 'Wishlist 1'),
   (2, 2, 'Wishlist 2'),
