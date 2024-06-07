@@ -96,3 +96,16 @@ VALUES
   (3, 4, 3, '2024-06-05 17:00:00'),
   (4, 5, 2, '2024-06-04 18:00:00'),
   (5, 1, 1, '2024-06-03 19:00:00');
+
+
+INSERT INTO Book_StoreDB.wishlist (Wishlist_ID, User_ID, Wishlist_Name)
+VALUES
+  (1, 1, 'Wishlist 1'),
+  (2, 2, 'Wishlist 2'),
+  (3, 3, 'Wishlist 3');
+
+INSERT INTO Book_StoreDB.wish_item (Book_ID, Wishlist_ID)
+VALUES
+  (1, 1),
+  (2, 2),
+  (3, 3);
