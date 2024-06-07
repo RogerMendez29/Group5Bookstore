@@ -25,7 +25,7 @@ public class RatingService {
 
 
     public Rating createRating(Book book, User user, int rating) {
-        Rating ratingFound = ratingRepository.findRatingByUserAndBookAndRating(user.getId(), book.getId(), rating);
+        Rating ratingFound = ratingRepository.findRatingByUserAndBookAndRating(user, book, rating);
         if (ratingFound != null) {
             throw new IllegalArgumentException("User has already rated this book.");
         }
