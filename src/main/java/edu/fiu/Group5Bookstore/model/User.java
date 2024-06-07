@@ -25,11 +25,23 @@ public class User {
     @Column(name = "Username")
     private String username;
     @Column(name = "Password")
-    @JsonIgnore
+    //@JsonIgnore
     private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<CartItem> cartItems = new ArrayList<>();
+
+    @Column(name = "Name")
+    private String name;
+    @Column(name = "Email")
+    private String email;
+    @Column(name = "Address")
+    private String address;
+
+    public String getUsername()
+    {
+        return username;
+    }
 
     public User() {
     }
@@ -41,12 +53,25 @@ public class User {
         this.cartItems = cartItems;
     }
 
+    public User(int id, String username, String password, List<CartItem> cartItems, String name, String email, String address) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.cartItems = cartItems;
+        this.name = name;
+        this.email = email;
+        this.address = address;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", address='" + address + '\'' +
                 '}';
     }
 }
