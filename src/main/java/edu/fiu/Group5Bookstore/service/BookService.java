@@ -26,6 +26,11 @@ public class BookService {
         return bookRepository.findByGenre(genre);
     }
 
+    public List<Book> getTopSoldBooks() {
+        return bookRepository.findTop10ByOrderByCopiesSoldDesc();
+    }
+
+
     public Book getBookByIsbn(String isbn) {
         return bookRepository.findByIsbn(isbn);
     }

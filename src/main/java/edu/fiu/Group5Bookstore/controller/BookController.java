@@ -42,6 +42,12 @@ public class BookController {
         return new ResponseEntity<>(byGenre, HttpStatus.OK);
     }
 
+    @GetMapping("/top")
+    public ResponseEntity<List<Book>> getTopSoldBooks()
+    {
+        List<Book> byGenre = bookService.getTopSoldBooks();
+        return new ResponseEntity<>(byGenre, HttpStatus.OK);
+    }
 
     @GetMapping
     public ResponseEntity<List<Book>> getAllBooks() {
