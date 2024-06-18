@@ -6,41 +6,39 @@ import java.time.LocalDate;
 
 @Entity
 @Data
-public class Rating {
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "bookid")
+    @JoinColumn(name = "book_id")
     private Book book;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    private int rating; // rating
-    private LocalDate datestamp; // datestamp
+    private String comment;
+    private LocalDate datestamp;
 
-    public Rating() {
+    public Comment() {
     }
 
-    public Rating(int id, User user, Book book, int rating, LocalDate datestamp) {
-        if (rating < 1 || rating > 5) {
-            throw new IllegalArgumentException("Rating must be between 1 and 5");
-        }
-        this.user = user;
+    public Comment(Book book, User user, String comment, LocalDate datestamp) {
         this.book = book;
-        this.rating = rating;
+        this.user = user;
+        this.comment = comment;
         this.datestamp = datestamp;
     }
 
     @Override
     public String toString() {
-        return "Rating{" +
+        return "Comment{" +
                 "id=" + user.getId() +
                 ", book= " + book.getId() +
-                ", rating=" + rating +
+                ", comment=" + comment +
                 ", datestamp=" + datestamp +
                 '}';
     }
+
 }

@@ -1,37 +1,17 @@
 package edu.fiu.Group5Bookstore.DTOs;
 
+import java.time.LocalDate;
+import lombok.Data;
+import lombok.Getter;
+
+@Data
 public class RatingPostDTO {
 
+    @Getter
     private int userId;
     private int bookId;
     private int rating;
-
-    public RatingPostDTO() {
-
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public int getBookId() {
-        return bookId;
-    }
-
-    public void setBookId(int bookId) {
-        this.bookId = bookId;
-    }
-
-    public int getRating() {
-        return rating;
-    }
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
+    private LocalDate datestamp;
 
     @Override
     public String toString() {
@@ -39,6 +19,7 @@ public class RatingPostDTO {
                 "bookId=" + bookId +
                 ", userId=" + userId +
                 ", rating=" + rating +
+                ", datestamp=" + datestamp +
                 '}';
     }
 }

@@ -7,40 +7,41 @@ import edu.fiu.Group5Bookstore.repository.RatingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
 public class RatingService {
 
-    private final UserService userService;
-    private final BookService bookService;
-    private final RatingRepository ratingRepository;
-
     @Autowired
-    public RatingService(RatingRepository ratingRepository, UserService userService, BookService bookService) {
-        this.ratingRepository = ratingRepository;
-        this.userService = userService;
-        this.bookService = bookService;
-    }
+    private RatingRepository ratingRepository;
 
-
-    public Rating createRating(Book book, User user, int rating) {
+    public Rating createRating(Book book, User user, int rating, LocalDate datestamp) {
         Rating ratingFound = ratingRepository.findRatingByUserAndBookAndRating(user, book, rating);
-        if (ratingFound != null) {
-            throw new IllegalArgumentException("User has already rated this book.");
+        if (ratingFound == null) {
+            Rating createdRating = new Rating();
+            createdRating.setUser(user);
+            createdRating.setBook(book);
+            createdRating.setRating(rating);
+            createdRating.setDatestamp(datestamp);
+            ratingRepository.save(createdRating);
+            return createdRating;
+        } else {
+            ratingFound.setUser(ratingFound.getUser());
+            ratingFound.setBook(ratingFound.getBook());
+            ratingFound.setRating(ratingFound.getRating());
+            ratingFound.setDatestamp(ratingFound.getDatestamp());
+            ratingRepository.save(ratingFound);
+            return ratingFound;
         }
-        Rating newRating = new Rating();
-        newRating.setUser(user);
-        newRating.setBook(book);
-        newRating.setRating(rating);
-        newRating.setTimestamp(new Timestamp(System.currentTimeMillis()));
-
-        return ratingRepository.save(newRating);
     }
 
-    public List<Rating> getRatingFromUserId(Integer user_id) {
-        return ratingRepository.findByUserId(user_id);
+    public double getAverageRatingFromBookId(int bookId) {
+       List<Rating> avgRating = ratingRepository.findByBookId(bookId);
+        return avgRating.stream().mapToDouble(Rating::getRating).average().orElse(0.0);
+    }
 
+    public List<Rating> getRatingFromBookId(int bookId) {
+        return ratingRepository.findByBookId(bookId);
     }
 }
