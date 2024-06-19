@@ -31,7 +31,7 @@ public class RatingController {
     }
 
     //create a rating for a book by a user on a 5-star scale with a datestamp
-    @PostMapping("/rating/{userId}/{bookId}")
+    @PostMapping("/{userId}/{bookId}")
     public ResponseEntity<Rating> createRating(@RequestBody RatingPostDTO ratingPostDTO) {
         User foundUser =  userService.findUser(ratingPostDTO.getUserId());
         Book foundBook = bookService.findBook(ratingPostDTO.getBookId());
