@@ -29,7 +29,7 @@ public class CommentController {
         this.commentService = commentService;
     }
 
-    @PostMapping("/comment/{userID}/{bookID}")
+    @PostMapping("/{userID}/{bookID}")
     public ResponseEntity<Comment> createComment(@RequestBody CommentPostDTO commentPostDTO) {
         User foundUser = userService.findUser(commentPostDTO.getUserId());
         Book foundBook = bookService.findBook(commentPostDTO.getBookId());
@@ -41,7 +41,7 @@ public class CommentController {
         }
     }
 
-    @GetMapping("/comments/{bookID}")
+    @GetMapping("/{bookID}")
     public ResponseEntity<List<Comment>> getComments(@PathVariable int bookID) {
         Book foundBook = bookService.findBook(bookID);
         if (foundBook != null) {
