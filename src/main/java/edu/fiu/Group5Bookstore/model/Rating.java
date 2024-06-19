@@ -12,7 +12,7 @@ public class Rating {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "bookid")
+    @JoinColumn(name = "book_id")
     private Book book;
 
     @ManyToOne
@@ -24,7 +24,7 @@ public class Rating {
     public Rating() {
     }
 
-    public Rating(int id, User user, Book book, int rating, LocalDate datestamp) {
+    public Rating( User user, Book book, int rating, LocalDate datestamp) {
         if (rating < 1 || rating > 5) {
             throw new IllegalArgumentException("Rating must be between 1 and 5");
         }
