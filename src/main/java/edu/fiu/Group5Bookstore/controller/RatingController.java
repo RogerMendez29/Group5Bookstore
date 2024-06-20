@@ -2,56 +2,58 @@ package edu.fiu.Group5Bookstore.controller;
 
 import edu.fiu.Group5Bookstore.DTOs.RatingPostDTO;
 import edu.fiu.Group5Bookstore.model.Book;
-import edu.fiu.Group5Bookstore.model.Comment;
 import edu.fiu.Group5Bookstore.model.Rating;
 import edu.fiu.Group5Bookstore.model.User;
-import edu.fiu.Group5Bookstore.service.BookService;
-import edu.fiu.Group5Bookstore.service.CommentService;
+import edu.fiu.Group5Bookstore.repository.BookRepository;
+import edu.fiu.Group5Bookstore.repository.UserRepository;
 import edu.fiu.Group5Bookstore.service.RatingService;
-import edu.fiu.Group5Bookstore.service.UserService;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/rating")
-
 public class RatingController {
 
-    private final BookService bookService;
-    private final UserService userService;
     private final RatingService ratingService;
+    private final UserRepository userRepository;
+    private final BookRepository bookRepository;
 
-    public RatingController(RatingService ratingService, UserService userService, BookService bookService) {
+    @Autowired
+    public RatingController(RatingService ratingService, UserRepository userRepository, BookRepository bookRepository) {
         this.ratingService = ratingService;
-        this.userService = userService;
-        this.bookService = bookService;
+        this.userRepository = userRepository;
+        this.bookRepository = bookRepository;
     }
 
-    //create a rating for a book by a user on a 5-star scale with a datestamp
-    @PostMapping("/{userId}/{bookId}")
+    @PostMapping("/create")
     public ResponseEntity<Rating> createRating(@RequestBody RatingPostDTO ratingPostDTO) {
-        User foundUser =  userService.findUser(ratingPostDTO.getUserId());
-        Book foundBook = bookService.findBook(ratingPostDTO.getBookId());
-        if (foundUser != null && foundBook != null) {
-            Rating createRating = ratingService.createRating(foundBook, foundUser, ratingPostDTO.getRating(), ratingPostDTO.getDatestamp());
-            return new ResponseEntity<Rating>(HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<Rating>(HttpStatus.BAD_REQUEST);
-        }
+        User user = userRepository.findById(ratingPostDTO.getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + ratingPostDTO.getUserId()));
+
+        Book book = bookRepository.findById(ratingPostDTO.getBookId())
+                .orElseThrow(() -> new EntityNotFoundException("Book not found with id: " + ratingPostDTO.getBookId()));
+
+        Rating rating = new Rating(ratingPostDTO.getRating(), user, book, ratingPostDTO.getDatestamp());
+        Rating savedRating = ratingService.createRating(rating);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedRating);
     }
 
     @GetMapping("/averageRating/{bookId}")
-    public ResponseEntity<List<Rating>> getAverageRatingFromBookId(@PathVariable int bookId) {
-        Book foundBook = bookService.findBook(bookId);
-        if (foundBook != null) {
-            double averageRating = ratingService.getAverageRatingFromBookId(foundBook.getId());
-            return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Double> getAverageRatingByBookId(@PathVariable int bookId) {
+        Double averageRating = ratingService.getAverageRatingByBookId(bookId);
+
+        if (averageRating != null) {
+            return ResponseEntity.ok(averageRating);
         } else {
-            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+            return ResponseEntity.notFound().build();
         }
     }
 }
+
+
+
 

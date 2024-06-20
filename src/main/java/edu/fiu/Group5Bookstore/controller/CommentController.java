@@ -4,9 +4,13 @@ import edu.fiu.Group5Bookstore.DTOs.CommentPostDTO;
 import edu.fiu.Group5Bookstore.model.Book;
 import edu.fiu.Group5Bookstore.model.Comment;
 import edu.fiu.Group5Bookstore.model.User;
+import edu.fiu.Group5Bookstore.repository.BookRepository;
+import edu.fiu.Group5Bookstore.repository.UserRepository;
 import edu.fiu.Group5Bookstore.service.BookService;
 import edu.fiu.Group5Bookstore.service.CommentService;
 import edu.fiu.Group5Bookstore.service.UserService;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,36 +23,41 @@ import java.util.List;
 
 public class CommentController {
 
-    private final BookService bookService;
-    private final UserService userService;
     private final CommentService commentService;
+    private final UserRepository userRepository;
+    private final BookRepository bookRepository;
 
-    public CommentController(BookService bookService, UserService userService, CommentService commentService) {
-        this.bookService = bookService;
-        this.userService = userService;
+    @Autowired
+    public CommentController(CommentService commentService, UserRepository userRepository, BookRepository bookRepository) {
         this.commentService = commentService;
+        this.userRepository = userRepository;
+        this.bookRepository = bookRepository;
     }
 
-    @PostMapping("/{userID}/{bookID}")
+    @PostMapping("/create") // done works as intended
     public ResponseEntity<Comment> createComment(@RequestBody CommentPostDTO commentPostDTO) {
-        User foundUser = userService.findUser(commentPostDTO.getUserId());
-        Book foundBook = bookService.findBook(commentPostDTO.getBookId());
-        if (foundUser != null && foundBook != null) {
-            Comment createdComment = commentService.createComment(foundBook, foundUser, commentPostDTO.getComment(), commentPostDTO.getDatestamp());
-            return new ResponseEntity<Comment>(createdComment, HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
-        }
+
+        User userId =userRepository.findById(commentPostDTO.getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + commentPostDTO.getUserId()));
+
+        Book bookId = bookRepository.findById(commentPostDTO.getBookId())
+                .orElseThrow(() -> new EntityNotFoundException("Book not found with id: " + commentPostDTO.getBookId()));
+
+        Comment comment = new Comment(bookId, userId, commentPostDTO.getComment(), commentPostDTO.getDatestamp());
+        Comment savedComment = commentService.createComment(comment);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedComment);
     }
 
-    @GetMapping("/{bookID}")
-    public ResponseEntity<List<Comment>> getComments(@PathVariable int bookID) {
-        Book foundBook = bookService.findBook(bookID);
-        if (foundBook != null) {
-            List<Comment> comments = commentService.getCommentFromBookId(foundBook.getId());
-            return new ResponseEntity<List<Comment>>(comments, HttpStatus.OK);
+    @GetMapping("/{bookId}")
+    public ResponseEntity<List<Comment>> getComments(@PathVariable int bookId) {
+
+        List<Comment> comments = commentService.getCommentByBookId(bookId);
+
+        if (!comments.isEmpty()) {
+            return ResponseEntity.ok(comments);
         } else {
-            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+            return ResponseEntity.notFound().build();
         }
     }
 }

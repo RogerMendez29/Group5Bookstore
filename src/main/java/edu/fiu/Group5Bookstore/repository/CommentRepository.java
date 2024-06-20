@@ -9,8 +9,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CommentRepository extends JpaRepository<Comment, String> {
-    List<Comment> findByBookId(Integer bookId);
-
-    Comment findCommentByUserAndBookAndComment(User user, Book book, String comment);
+public interface CommentRepository extends JpaRepository<Comment, Integer> {
+    List<Comment> findByBookId(int bookId);
 }
