@@ -10,17 +10,17 @@ INSERT INTO Book_StoreDB.book (title, author, isbn, price) VALUES
 ('Animal Farm', 'George Orwell', '9780451526342', 7.99),
 ('Moby-Dick', 'Herman Melville', '9781503280786', 11.49);
 
-INSERT INTO Book_StoreDB.user (Username, Password) VALUES
-('john_doe', 'password1'),
-('jane_doe', 'password2'),
-('alex_smith', 'password3'),
-('emily_jones', 'password4'),
-('michael_johnson', 'password5'),
-('sarah_williams', 'password6'),
-('david_brown', 'password7'),
-('lisa_miller', 'password8'),
-('kevin_davis', 'password9'),
-('amanda_taylor', 'password10');
+INSERT INTO Book_StoreDB.user (Username, Password, Name, Email, Address) VALUES
+('john_doe', 'password1', 'John Doe', 'johndoe@mail.com', '123 NW 1 ST'),
+('jane_doe', 'password2', 'Jane Doe', 'janedoe@mail.com', '123 NW 2 ST'),
+('alex_smith', 'password3', 'Alex Smith', 'alexsmith@mail.com', '123 NW 3 ST'),
+('emily_jones', 'password4', 'Emily Jones', 'emilyjones@mail.com', '123 NW 4 ST'),
+('michael_johnson', 'password5', 'Michael Johnson', 'michaeljohnson@mail.com', '123 NW 5 ST'),
+('sarah_williams', 'password6', 'Sarah Williams', 'sarahwilliams@mail.com', '123 NW 6 ST'),
+('david_brown', 'password7', 'David Brown', 'davidbrown@mail.com', '123 NW 7 ST'),
+('lisa_miller', 'password8', 'Lisa Miller', 'lisamiller@mail.com', '123 NW 8 ST'),
+('kevin_davis', 'password9', 'Kevin Davis', 'kevindavis@mail.com', '123 NW 9 ST'),
+('amanda_taylor', 'password10', 'Amanda Taylor', 'amandataylor@mail.com', '123 NW 10 ST');
 
 INSERT INTO Book_StoreDB.cart_item (Book_ID, Quantity, Total_Price, User_ID) VALUES
 (1, 2, 20.0, 1),  -- User 'john_doe' adds 2 books with ID 1 to cart
