@@ -37,11 +37,17 @@ public class BookController {
     }
 
     @GetMapping("/genre/{genre}")
-    public ResponseEntity<List<Book>> getUsersCart(@PathVariable String genre) {
+    public ResponseEntity<List<Book>> getBookByGenre(@PathVariable String genre) {
         List<Book> byGenre = bookService.getBookByGenre(genre);
         return new ResponseEntity<>(byGenre, HttpStatus.OK);
     }
 
+    @GetMapping("/top")
+    public ResponseEntity<List<Book>> getTopSoldBooks()
+    {
+        List<Book> byGenre = bookService.getTopSoldBooks();
+        return new ResponseEntity<>(byGenre, HttpStatus.OK);
+    }
 
     @GetMapping
     public ResponseEntity<List<Book>> getAllBooks() {

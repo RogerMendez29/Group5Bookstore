@@ -7,40 +7,43 @@ import edu.fiu.Group5Bookstore.repository.RatingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 @Service
 public class RatingService {
 
-    private final UserService userService;
-    private final BookService bookService;
     private final RatingRepository ratingRepository;
 
     @Autowired
-    public RatingService(RatingRepository ratingRepository, UserService userService, BookService bookService) {
+    public RatingService(RatingRepository ratingRepository) {
         this.ratingRepository = ratingRepository;
-        this.userService = userService;
-        this.bookService = bookService;
     }
 
+    public Rating createRating(Rating rating) {
+        validateRating(rating.getRating());
+        return ratingRepository.save(rating);
+    }
 
-    public Rating createRating(Book book, User user, int rating) {
-        Rating ratingFound = ratingRepository.findRatingByUserAndBookAndRating(user, book, rating);
-        if (ratingFound != null) {
-            throw new IllegalArgumentException("User has already rated this book.");
+    public Double getAverageRatingByBookId(int bookId) {
+        List<Rating> ratings = ratingRepository.findByBookId(bookId);
+
+        if (ratings.isEmpty()) {
+            return null; // Or handle as appropriate if no ratings are found
         }
-        Rating newRating = new Rating();
-        newRating.setUser(user);
-        newRating.setBook(book);
-        newRating.setRating(rating);
-        newRating.setTimestamp(new Timestamp(System.currentTimeMillis()));
 
-        return ratingRepository.save(newRating);
+        int sum = 0;
+        for (Rating rating : ratings) {
+            sum += rating.getRating();
+        }
+
+        double average = (double) sum / ratings.size();
+        return average;
     }
 
-    public List<Rating> getRatingFromUserId(Integer user_id) {
-        return ratingRepository.findByUserId(user_id);
-
+    private void validateRating(int rating) {
+        if (rating < 1 || rating > 5) {
+            throw new IllegalArgumentException("Rating must be between 1 and 5");
+        }
     }
 }
+

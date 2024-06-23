@@ -9,8 +9,8 @@ import lombok.Data;
 @Data
 public class CartItemPostDTO {
 
-    private  int bookId;
-    private  int userId;
+    private int bookId;
+    private int userId;
     private int quantity;
 
     @Override

@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 @Entity
 @Data
-public class Rating {
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore // Ignore id during serialization
@@ -24,16 +24,19 @@ public class Rating {
     @JsonIgnoreProperties({"username", "cartItems"}) // Ignore fields in User entity
     private User user;
 
-    private int rating; // rating
-    private LocalDate datestamp; // datestamp
+    //@JsonProperty("comment")
+    private String comment;
 
-    public Rating() {
+    //@JsonProperty("datestamp")
+    private LocalDate datestamp;
+
+    public Comment() {
     }
 
-    public Rating(int rating, User user, Book book, LocalDate datestamp) {
-        this.rating = rating;
-        this.user = user;
+    public Comment(Book book, User user, String comment, LocalDate datestamp) {
         this.book = book;
+        this.user = user;
+        this.comment = comment;
         this.datestamp = datestamp;
     }
 
@@ -44,11 +47,12 @@ public class Rating {
 
     @Override
     public String toString() {
-        return "Rating{" +
-                "rating=" + rating +
-                ", user=" + user.getId() +
-                ", book=" + book.getId() +
+        return "Comment{" +
+                "user=" + user.getId() +
+                ", book= " + book.getId() +
+                ", comment=" + comment +
                 ", datestamp=" + datestamp +
                 '}';
     }
+
 }
