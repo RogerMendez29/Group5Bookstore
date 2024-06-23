@@ -33,45 +33,55 @@ public class CartItemController {
     @GetMapping("/subtotal/{userID}")
     public ResponseEntity<?> getSubTotal(@PathVariable String userID)  {
         try{
-           User foundUser = userService.findUser(Integer.parseInt(userID));
+            User foundUser = userService.findUser(Integer.parseInt(userID));
             List<CartItem> cartItems = cartService.getCartItemsByUserId(foundUser.getId());
+            String responseMsg = "The cart for user '" + foundUser.getUsername() + "' (User ID: " + foundUser.getId() + ") is empty.";
+            if (cartItems.size() == 0) return new ResponseEntity<>(responseMsg, HttpStatus.OK);
             double grandTotal = cartService.getGrandTotal(cartItems);
             return new ResponseEntity<>(grandTotal, HttpStatus.OK);
 
         }catch (GeneralNotFoundException exception){
             System.out.println(Arrays.asList(exception.getStackTrace()));
             return new ResponseEntity<>(exception.getMessage(),exception.getStatus());
-
         }
-
-
-
     }
     @PostMapping("/addToCart")
-    public ResponseEntity<CartItem> createCartItem(@RequestBody CartItemPostDTO cartItemPostDTO) {
-        User foundUser = userService.findUser(cartItemPostDTO.getUserId());
-        Book foundBook = bookService.findBook(cartItemPostDTO.getBookId());
-        CartItem createdCartItem = cartService.createCartItem(foundBook,foundUser, cartItemPostDTO.getQuantity());
+    public ResponseEntity<?> createCartItem(@RequestBody CartItemPostDTO cartItemPostDTO) {
+        try {
+            Book foundBook = bookService.findBook(cartItemPostDTO.getBookId());
+            User foundUser = userService.findUser(cartItemPostDTO.getUserId());
+            CartItem createdCartItem = cartService.createCartItem(foundBook,foundUser, cartItemPostDTO.getQuantity());
+            return new ResponseEntity<CartItem>(createdCartItem, HttpStatus.OK);
 
-         return new ResponseEntity<CartItem>(createdCartItem, HttpStatus.OK);
-
+        } catch (GeneralNotFoundException exception){
+            return new ResponseEntity<>(exception.getMessage(),exception.getStatus());
+        }
     }
-
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<CartItem>> getUsersCart(@PathVariable int userId) {
-        User foundUser = userService.findUser(userId);
-        List<CartItem> cartItems = cartService.getCartItemsByUserId(foundUser.getId());
-        return new ResponseEntity<>(cartItems, HttpStatus.OK);
+    public ResponseEntity<?> getUsersCart(@PathVariable int userId) {
+        try {
+            User foundUser = userService.findUser(userId);
+            List<CartItem> cartItems = cartService.getCartItemsByUserId(foundUser.getId());
+            String responseMsg = "The cart for user '" + foundUser.getUsername() + "' (User ID: " + foundUser.getId() + ") is empty.";
+            if (cartItems.size() == 0) return new ResponseEntity<>(responseMsg, HttpStatus.OK);
+            return new ResponseEntity<>(cartItems, HttpStatus.OK);
+
+        } catch (GeneralNotFoundException exception){
+            return new ResponseEntity<>(exception.getMessage(),exception.getStatus());
+        }
     }
 
     @DeleteMapping("/delete/user/{userId}/book/{bookId}")
     public ResponseEntity<String> deleteCartItem(@PathVariable int userId,@PathVariable int bookId ) {
-        cartService.deleteCartItem(userId,bookId);
-        Book foundBook = bookService.findBook(bookId);
-        String responseMsg = "Cart item for user " + userId + " and book '" + foundBook.getTitle() + "' (Id: " + bookId + ") was deleted successfully.";
-        return ResponseEntity.ok(responseMsg);
+        try{
+            cartService.deleteCartItem(userId,bookId);
+            User foundUser = userService.findUser(userId);
+            Book foundBook = bookService.findBook(bookId);
+            String responseMsg = "The cart item associated with " +foundUser.toString() +" & Book titled '" + foundBook.getTitle() + "' (Book ID: " + bookId + ") has been successfully deleted.";
+            return ResponseEntity.ok(responseMsg);
 
+        } catch (GeneralNotFoundException exception){
+            return new ResponseEntity<>(exception.getMessage(),exception.getStatus());
+        }
     }
-
-
 }

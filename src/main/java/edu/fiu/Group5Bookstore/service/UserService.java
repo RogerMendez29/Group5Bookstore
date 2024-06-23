@@ -17,7 +17,7 @@ public class UserService {
     public User findUser(int userId) {
         User foundUser = userRepository.findByid(userId);
         if (foundUser == null) {
-            throw new GeneralNotFoundException("User not found with ID: " + userId, HttpStatus.NOT_FOUND);
+            throw new GeneralNotFoundException("User not found with Id: " + userId, HttpStatus.NOT_FOUND);
         }
         return foundUser;
     }
