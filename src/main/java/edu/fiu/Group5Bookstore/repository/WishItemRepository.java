@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface WishRepository extends JpaRepository<WishItem, Integer> {
+public interface WishItemRepository extends JpaRepository<WishItem, Integer> {
     //WishList findWishListFromId(int id);
     List<WishItem> findByWishListID(int wishListID);
 }

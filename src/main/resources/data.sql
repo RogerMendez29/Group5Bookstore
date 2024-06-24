@@ -121,13 +121,13 @@ VALUES
   (5, 1, 'book was so-so', '2024-06-03 19');
 
 
-INSERT INTO Book_StoreDB.wishlist (Wishlist_ID, User_ID, Wishlist_Name)
+INSERT INTO Book_StoreDB.wish_list (wish_listid, user_id, wishlist_name)
 VALUES
   (1, 1, 'Wishlist 1'),
-  (2, 2, 'Wishlist 2'),
-  (3, 3, 'Wishlist 3');
+  (2, 1, 'Wishlist 2'),
+  (3, 1, 'Wishlist 3');
 
-INSERT INTO Book_StoreDB.wish_item (Book_ID, Wishlist_ID)
+INSERT INTO Book_StoreDB.wish_item (book_id, wish_listid)
 VALUES
   (1, 1),
   (2, 2),
