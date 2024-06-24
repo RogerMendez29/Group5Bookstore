@@ -45,7 +45,7 @@ public class WishService {
         if (wishListRepository.existsById(wl.getWishListID())) {
             throw new GeneralBadRequestException("Wish list with ID " + wl.getWishListID() + " already exists.", HttpStatus.BAD_REQUEST);
         }
-        if (wishListRepository.existsByWishListName(wl.getWishListName())) {
+        if (wishListRepository.existsByUserIdAndWishListName(wl.getUserId(), wl.getWishListName())) {
             throw new GeneralBadRequestException("Wish list with name " + wl.getWishListName() + " already exists.", HttpStatus.BAD_REQUEST);
         }
         wishListRepository.save(wl);
