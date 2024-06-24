@@ -1,16 +1,21 @@
 package edu.fiu.Group5Bookstore.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Entity
 @Data
 public class WishItem {
 
     @Id
-    private int bookId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
+    private int id;
+
+    @ManyToOne
+    @JoinColumn(name = "book_id")
+    private Book book;
 
     private int wishListID;
 
@@ -18,8 +23,8 @@ public class WishItem {
 
     }
 
-    public WishItem(int bookId, int wishListID) {
-        this.bookId = bookId;
+    public WishItem(Book book, int wishListID) {
+        this.book = book;
         this.wishListID = wishListID;
         //wishlistID
     }
@@ -27,7 +32,7 @@ public class WishItem {
     @Override
     public String toString() {
         return "WishItem{" +
-                "book= " + bookId +
+                ", book= " + book.getId() +": " +book.getTitle() +
                 ", wishListID = " + wishListID +
                 '}';
     }
