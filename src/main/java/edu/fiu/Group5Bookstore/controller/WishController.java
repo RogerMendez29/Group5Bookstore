@@ -1,7 +1,7 @@
 package edu.fiu.Group5Bookstore.controller;
 
 import edu.fiu.Group5Bookstore.DTOs.WishPostDTO;
-import edu.fiu.Group5Bookstore.exceptions.GeneralNotFoundException;
+import edu.fiu.Group5Bookstore.exceptions.*;
 import edu.fiu.Group5Bookstore.model.*;
 import edu.fiu.Group5Bookstore.service.*;
 import org.springframework.http.HttpStatus;
@@ -37,7 +37,9 @@ public class WishController {
             wishService.createWishlist(wl);
 
             return ResponseEntity.status(201).build();
-        } catch (GeneralNotFoundException exception){
+        } catch (GeneralNotFoundException exception) {
+            return new ResponseEntity<>(exception.getMessage(),exception.getStatus());
+        } catch (GeneralBadRequestException exception) {
             return new ResponseEntity<>(exception.getMessage(),exception.getStatus());
         }
     }
@@ -48,11 +50,13 @@ public class WishController {
             int bookId = WishPostDTO.getBookId();
             int wishlistId = WishPostDTO.getWishlistId();
 
-            WishItem wi = new WishItem(bookId, wishlistId);
+            WishItem wi = new WishItem(bookService.findBook(WishPostDTO.getBookId()), wishlistId);
             wishService.addBook(wi);
 
             return ResponseEntity.status(201).build();
         } catch (GeneralNotFoundException exception){
+            return new ResponseEntity<>(exception.getMessage(),exception.getStatus());
+        } catch (GeneralBadRequestException exception) {
             return new ResponseEntity<>(exception.getMessage(),exception.getStatus());
         }
     }
@@ -63,11 +67,13 @@ public class WishController {
             int bookId = WishPostDTO.getBookId();
             int wishlistId = WishPostDTO.getWishlistId();
 
-            WishItem wi = new WishItem(bookId, wishlistId);
+            WishItem wi = new WishItem(bookService.findBook(WishPostDTO.getBookId()), wishlistId);
             wishService.removeBook(wi);
 
             return ResponseEntity.status(200).build();
         } catch (GeneralNotFoundException exception){
+            return new ResponseEntity<>(exception.getMessage(),exception.getStatus());
+        } catch (GeneralBadRequestException exception) {
             return new ResponseEntity<>(exception.getMessage(),exception.getStatus());
         }
     }
@@ -78,7 +84,7 @@ public class WishController {
             List<WishItem> wishItems = wishService.getWishItemsFromId(wishListID);
             ArrayList<Book> books = new ArrayList<Book>();
             for (WishItem w : wishItems) {
-                books.add(bookService.findBook(w.getBookId()));
+                books.add(w.getBook());
             }
 
             return new ResponseEntity<>(books, HttpStatus.OK);
