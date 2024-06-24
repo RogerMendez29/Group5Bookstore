@@ -1,6 +1,7 @@
 package edu.fiu.Group5Bookstore.controller;
 
 import edu.fiu.Group5Bookstore.DTOs.WishPostDTO;
+import edu.fiu.Group5Bookstore.exceptions.GeneralNotFoundException;
 import edu.fiu.Group5Bookstore.model.*;
 import edu.fiu.Group5Bookstore.service.*;
 import org.springframework.http.HttpStatus;
@@ -24,49 +25,65 @@ public class WishController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Void> createWishlist(@RequestBody WishPostDTO WishPostDTO) {
-        int userId = WishPostDTO.getUserId();
-        String name = WishPostDTO.getName();
+    public ResponseEntity<?> createWishlist(@RequestBody WishPostDTO WishPostDTO) {
+        try {
+            int userId = WishPostDTO.getUserId();
+            String name = WishPostDTO.getName();
 
-        User foundUser = userService.findUser(userId);
+            User foundUser = userService.findUser(userId);
 
 
-        WishList wl = new WishList(wishService.incrementWishlistId(userId), userId, name);
-        wishService.createWishlist(wl);
+            WishList wl = new WishList(wishService.incrementWishlistId(userId), userId, name);
+            wishService.createWishlist(wl);
 
-        return ResponseEntity.status(201).build();
+            return ResponseEntity.status(201).build();
+        } catch (GeneralNotFoundException exception){
+            return new ResponseEntity<>(exception.getMessage(),exception.getStatus());
+        }
     }
 
     @PostMapping("/addBook")
-    public ResponseEntity<Void> addBook(@RequestBody WishPostDTO WishPostDTO) {
-        int bookId = WishPostDTO.getBookId();
-        int wishlistId = WishPostDTO.getWishlistId();
+    public ResponseEntity<?> addBook(@RequestBody WishPostDTO WishPostDTO) {
+        try {
+            int bookId = WishPostDTO.getBookId();
+            int wishlistId = WishPostDTO.getWishlistId();
 
-        WishItem wi = new WishItem(bookId, wishlistId);
-        wishService.addBook(wi);
+            WishItem wi = new WishItem(bookId, wishlistId);
+            wishService.addBook(wi);
 
-        return ResponseEntity.status(201).build();
+            return ResponseEntity.status(201).build();
+        } catch (GeneralNotFoundException exception){
+            return new ResponseEntity<>(exception.getMessage(),exception.getStatus());
+        }
     }
 
     @DeleteMapping("/removeBook")
-    public ResponseEntity<Void> removeBook(@RequestBody WishPostDTO WishPostDTO) {
-        int bookId = WishPostDTO.getBookId();
-        int wishlistId = WishPostDTO.getWishlistId();
+    public ResponseEntity<?> removeBook(@RequestBody WishPostDTO WishPostDTO) {
+        try {
+            int bookId = WishPostDTO.getBookId();
+            int wishlistId = WishPostDTO.getWishlistId();
 
-        WishItem wi = new WishItem(bookId, wishlistId);
-        wishService.removeBook(wi);
+            WishItem wi = new WishItem(bookId, wishlistId);
+            wishService.removeBook(wi);
 
-        return ResponseEntity.status(200).build();
+            return ResponseEntity.status(200).build();
+        } catch (GeneralNotFoundException exception){
+            return new ResponseEntity<>(exception.getMessage(),exception.getStatus());
+        }
     }
 
     @GetMapping("/get/{wishListID}")
-    public ResponseEntity<List<Book>> getWishlist(@PathVariable int wishListID) {
-        List<WishItem> wishItems = wishService.getWishItemsFromId(wishListID);
-        ArrayList<Book> books = new ArrayList<Book>();
-        for (WishItem w : wishItems) {
-            books.add(bookService.findBook(w.getBookId()));
-        }
+    public ResponseEntity<?> getWishlist(@PathVariable int wishListID) {
+        try {
+            List<WishItem> wishItems = wishService.getWishItemsFromId(wishListID);
+            ArrayList<Book> books = new ArrayList<Book>();
+            for (WishItem w : wishItems) {
+                books.add(bookService.findBook(w.getBookId()));
+            }
 
-        return new ResponseEntity<>(books, HttpStatus.OK);
+            return new ResponseEntity<>(books, HttpStatus.OK);
+        } catch (GeneralNotFoundException exception){
+            return new ResponseEntity<>(exception.getMessage(),exception.getStatus());
+        }
     }
 }
