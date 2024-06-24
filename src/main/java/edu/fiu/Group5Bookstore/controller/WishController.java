@@ -1,6 +1,6 @@
 package edu.fiu.Group5Bookstore.controller;
 
-import edu.fiu.Group5Bookstore.DTOs.CartItemPostDTO;
+import edu.fiu.Group5Bookstore.DTOs.WishPostDTO;
 import edu.fiu.Group5Bookstore.model.*;
 import edu.fiu.Group5Bookstore.service.*;
 import org.springframework.http.HttpStatus;
@@ -23,14 +23,41 @@ public class WishController {
         this.userService = userService;
     }
 
-    /*@PostMapping("/create")
-    public ResponseEntity<String> createWishlist(@PathVariable String name, @PathVariable int userId) {
-        User foundUser = userService.findUser(userId);
-        WishList wl = wishService.createWishlist(name, userId);
+    @PostMapping("/create")
+    public ResponseEntity<Void> createWishlist(@RequestBody WishPostDTO WishPostDTO) {
+        int userId = WishPostDTO.getUserId();
+        String name = WishPostDTO.getName();
 
-        String responseMsg = "h";
-        return ResponseEntity.ok(responseMsg);
-    }*/
+        User foundUser = userService.findUser(userId);
+
+
+        WishList wl = new WishList(wishService.incrementWishlistId(userId), userId, name);
+        wishService.createWishlist(wl);
+
+        return ResponseEntity.status(201).build();
+    }
+
+    @PostMapping("/addBook")
+    public ResponseEntity<Void> addBook(@RequestBody WishPostDTO WishPostDTO) {
+        int bookId = WishPostDTO.getBookId();
+        int wishlistId = WishPostDTO.getWishlistId();
+
+        WishItem wi = new WishItem(bookId, wishlistId);
+        wishService.addBook(wi);
+
+        return ResponseEntity.status(201).build();
+    }
+
+    @DeleteMapping("/removeBook")
+    public ResponseEntity<Void> removeBook(@RequestBody WishPostDTO WishPostDTO) {
+        int bookId = WishPostDTO.getBookId();
+        int wishlistId = WishPostDTO.getWishlistId();
+
+        WishItem wi = new WishItem(bookId, wishlistId);
+        wishService.removeBook(wi);
+
+        return ResponseEntity.status(200).build();
+    }
 
     @GetMapping("/get/{wishListID}")
     public ResponseEntity<List<Book>> getWishlist(@PathVariable int wishListID) {
