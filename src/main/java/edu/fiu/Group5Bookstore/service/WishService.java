@@ -1,4 +1,5 @@
 package edu.fiu.Group5Bookstore.service;
+import edu.fiu.Group5Bookstore.exceptions.GeneralBadRequestException;
 import edu.fiu.Group5Bookstore.exceptions.GeneralNotFoundException;
 import edu.fiu.Group5Bookstore.model.WishList;
 import edu.fiu.Group5Bookstore.model.WishItem;
@@ -28,7 +29,8 @@ public class WishService {
             throw new GeneralNotFoundException("No wish list found with ID " + wishListId + ".", HttpStatus.NOT_FOUND);
         }
     }
-    public void verifyBookId(int bookId) throws GeneralNotFoundException {
+    public void verifyBookId(WishItem wi) throws GeneralNotFoundException {
+        int bookId = wi.getBook().getId();
         if (!bookRepository.existsById(bookId)) {
             throw new GeneralNotFoundException("No book found with ID " + bookId + ".", HttpStatus.NOT_FOUND);
         }
@@ -41,31 +43,44 @@ public class WishService {
 
     public void createWishlist(WishList wl) {
         if (wishListRepository.existsById(wl.getWishListID())) {
-            throw new GeneralNotFoundException("Wish list with ID " + wl.getWishListID() + " already exists.", HttpStatus.NOT_FOUND);
+            throw new GeneralBadRequestException("Wish list with ID " + wl.getWishListID() + " already exists.", HttpStatus.BAD_REQUEST);
+        }
+        if (wishListRepository.existsByWishListName(wl.getWishListName())) {
+            throw new GeneralBadRequestException("Wish list with name " + wl.getWishListName() + " already exists.", HttpStatus.BAD_REQUEST);
         }
         wishListRepository.save(wl);
     }
 
     public void addBook(WishItem wi) {
         verifyWishListId(wi.getWishListID());
-        verifyBookId(wi.getBookId());
+        verifyBookId(wi);
+
+        if (wishItemRepository.findByBookIdAndWishListID(wi.getBook().getId(), wi.getWishListID()) != null) {
+            throw new GeneralBadRequestException("Book with ID " + wi.getBook().getId() + " is already in whitelist " + wi.getWishListID() + ".", HttpStatus.BAD_REQUEST);
+        }
+
         wishItemRepository.save(wi);
     }
     public void removeBook(WishItem wi) {
         verifyWishListId(wi.getWishListID());
-        verifyBookId(wi.getBookId());
-        wishItemRepository.delete(wi);
+        verifyBookId(wi);
+
+        WishItem wi2 = wishItemRepository.findByBookIdAndWishListID(wi.getBook().getId(), wi.getWishListID());
+
+        if (wi2 == null) {
+            throw new GeneralBadRequestException("Book with ID " + wi.getBook().getId() + " is not in whitelist " + wi.getWishListID() + ".", HttpStatus.BAD_REQUEST);
+        }
+
+        wishItemRepository.delete(wi2);
     }
 
-    public int incrementWishlistId(int userId) { // better implementation would involve adding a member to the User class, but this is less invasive
+    public int incrementWishlistId(int userId) {
         try {
-            List<WishItem> wl = getWishItemsFromId(userId);
-            int max = 0;
-            for (WishItem wi : wl) {
-                if (wi.getWishListID() > max)
-                    max = wi.getWishListID();
+            int amntWishlists = wishListRepository.findAllByUserId(userId).size();
+            if (amntWishlists == 3) {
+                throw new GeneralBadRequestException("User with ID " + userId + " has already exceeded 3 wishlists.", HttpStatus.BAD_REQUEST);
             }
-            return max + 1;
+            return (int)(wishListRepository.count() + 1);
         } catch (GeneralNotFoundException exception) {
             return 1;
         }

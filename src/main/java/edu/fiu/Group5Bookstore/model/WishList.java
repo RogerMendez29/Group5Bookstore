@@ -1,9 +1,7 @@
 package edu.fiu.Group5Bookstore.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Entity
 @Data
@@ -13,22 +11,23 @@ public class WishList {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int wishListID;
     private int userId;
-    private String wishlist_name;
+    private String wishListName;
 
     public WishList() {
 
     }
 
-    public WishList(int wishListID, int userId, String wishlist_name) {
+    public WishList(int wishListID, int userId, String wishListName) {
         this.wishListID = wishListID;
         this.userId = userId;
-        this.wishlist_name = wishlist_name;
+        this.wishListName = wishListName;
     }
 
     @Override
     public String toString() {
         return "WishList{" +
                 "wishListID = " + wishListID +
+                ", wishListName = " + wishListName +
                 ", user = " + userId +
                 '}';
     }

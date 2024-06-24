@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface WishListRepository extends JpaRepository<WishList, Integer> {
     WishList findOneByWishListID(int wishListID);
+    List<WishList> findAllByUserId(int userId);
+    boolean existsByWishListName(String wishListName);
 }
