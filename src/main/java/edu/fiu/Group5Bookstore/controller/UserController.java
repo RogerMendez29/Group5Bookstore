@@ -41,6 +41,19 @@ public class UserController {
     }
     */
 
+
+    @GetMapping("/getUser/username/{username}")
+    public ResponseEntity<User> getUserUsername(@PathVariable String username) {
+        List<User> users = userService.getAllUsers();
+        User user = new User();
+        for(User u : users) {
+            if(u.getUsername().equals(username)){
+                user = userService.getUserByID(u.getId());
+            }
+        }
+        return ResponseEntity.ok(user);
+    }
+
     @GetMapping("/getUser/{id}")
     public ResponseEntity<User> getUserID(@PathVariable Integer id) {
         User user = userService.getUserByID(id);
