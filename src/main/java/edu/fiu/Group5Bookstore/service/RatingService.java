@@ -36,8 +36,7 @@ public class RatingService {
             sum += rating.getRating();
         }
 
-        double average = (double) sum / ratings.size();
-        return average;
+        return (double) sum / ratings.size();
     }
 
     private void validateRating(int rating) {
