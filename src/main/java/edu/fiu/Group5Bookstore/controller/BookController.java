@@ -1,5 +1,6 @@
 package edu.fiu.Group5Bookstore.controller;
 
+import edu.fiu.Group5Bookstore.DTOs.BookDiscountPatchDTO;
 import edu.fiu.Group5Bookstore.model.Book;
 import edu.fiu.Group5Bookstore.model.CartItem;
 import edu.fiu.Group5Bookstore.model.User;
@@ -42,12 +43,34 @@ public class BookController {
         return new ResponseEntity<>(byGenre, HttpStatus.OK);
     }
 
+    @GetMapping("/publisher/{publisher}")
+    public ResponseEntity<List<Book>> getBookByPublisher(@PathVariable String publisher)
+    {
+        List<Book> byPublisher = bookService.getBookByPublisher(publisher);
+        return new ResponseEntity<>(byPublisher, HttpStatus.OK);
+    }
+
     @GetMapping("/top")
     public ResponseEntity<List<Book>> getTopSoldBooks()
     {
-        List<Book> byGenre = bookService.getTopSoldBooks();
-        return new ResponseEntity<>(byGenre, HttpStatus.OK);
+        List<Book> byTopSold = bookService.getTopSoldBooks();
+        return new ResponseEntity<>(byTopSold, HttpStatus.OK);
     }
+
+    @GetMapping("/rating/{rating}")
+    public ResponseEntity<List<Book>> getBookByAverageRating(@PathVariable Double rating)
+    {
+        List<Book> byRating = bookService.getBookByRating(rating);
+        return new ResponseEntity<>(byRating, HttpStatus.OK);
+    }
+
+    @PatchMapping("/discount")
+    public ResponseEntity<?> applyDiscountByPublisher(@RequestBody BookDiscountPatchDTO bookDiscountPatchDTO)
+    {
+        bookService.applyDiscount(bookDiscountPatchDTO.getPublisher(), bookDiscountPatchDTO.getDiscount());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 
     @GetMapping
     public ResponseEntity<List<Book>> getAllBooks() {
