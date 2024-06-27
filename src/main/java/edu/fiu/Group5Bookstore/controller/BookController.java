@@ -68,7 +68,8 @@ public class BookController {
     public ResponseEntity<?> applyDiscountByPublisher(@RequestBody BookDiscountPatchDTO bookDiscountPatchDTO)
     {
         bookService.applyDiscount(bookDiscountPatchDTO.getPublisher(), bookDiscountPatchDTO.getDiscount());
-        return new ResponseEntity<>(HttpStatus.OK);
+        String returnMessage = (bookDiscountPatchDTO.getDiscount() * 100) + "% discount was applied to " + bookDiscountPatchDTO.getPublisher() + "'s books.";
+        return new ResponseEntity<>(returnMessage,HttpStatus.OK);
     }
 
 
