@@ -32,4 +32,14 @@ public class Author {
         this.bio = bio;
         this.publisher = publisher;
     }
+
+    public String toString() {
+        return "Author{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", bio='" + bio + '\'' +
+                ", publisher='" + publisher + '\'' +
+                '}';
+    }
 }
