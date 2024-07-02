@@ -1,10 +1,10 @@
 package edu.fiu.Group5Bookstore.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 @Entity
@@ -22,6 +22,10 @@ public class Author {
 
     private String publisher;
 
+    @OneToMany(mappedBy = "bookAuthor", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Book> books;
+
     public Author() {
     }
 
@@ -31,5 +35,15 @@ public class Author {
         this.lastName = lastName;
         this.bio = bio;
         this.publisher = publisher;
+    }
+
+    public String toString() {
+        return "Author{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", bio='" + bio + '\'' +
+                ", publisher='" + publisher + '\'' +
+                '}';
     }
 }

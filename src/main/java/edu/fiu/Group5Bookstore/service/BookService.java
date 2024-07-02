@@ -65,6 +65,10 @@ public class BookService {
         }
     }
 
+    public List<Book> getBooksByAuthor(int authorId) {
+        return bookRepository.findByBookAuthor_Id(authorId);
+    }
+
     public Book getBookByIsbn(String isbn) {
         return bookRepository.findByIsbn(isbn);
     }
