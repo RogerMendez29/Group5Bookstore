@@ -1,6 +1,7 @@
 package edu.fiu.Group5Bookstore.controller;
 
 import edu.fiu.Group5Bookstore.model.Author;
+import edu.fiu.Group5Bookstore.model.Book;
 import edu.fiu.Group5Bookstore.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,9 +34,16 @@ public class AuthorController {
         }
     }
 
+
+
     @GetMapping
     public ResponseEntity<List<Author>> getAllAuthors() {
         List<Author> authors = authorService.getAllAuthors();
         return ResponseEntity.ok(authors);
+    }
+
+    public ResponseEntity<List<Book>> getBooksByAuthorId(@PathVariable int authorId) {
+        List<Book> books = authorService.getBooksByAuthorId(authorId);
+        return ResponseEntity.ok(books);
     }
 }

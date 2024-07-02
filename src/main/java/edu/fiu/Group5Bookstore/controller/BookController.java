@@ -79,4 +79,10 @@ public class BookController {
         return ResponseEntity.ok(books);
     }
 
+    @GetMapping("/authors/{authorId}")
+    public ResponseEntity<List<Book>> getBooksByAuthor(@PathVariable int authorId) {
+        List<Book> books = bookService.getBooksByAuthor(authorId);
+        return ResponseEntity.ok(books);
+    }
+
 }

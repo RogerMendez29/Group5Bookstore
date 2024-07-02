@@ -12,6 +12,7 @@ public interface BookRepository extends JpaRepository<Book,Integer> {
     Book findByIsbn(String isbn);
     List<Book> findTop10ByOrderByCopiesSoldDesc();
     List<Book> findByPublisher(String publisher);
+    List<Book> findByBookAuthor_Id(int authorId);
 }
 
 

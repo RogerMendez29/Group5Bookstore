@@ -1,9 +1,7 @@
 package edu.fiu.Group5Bookstore.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
@@ -24,6 +22,11 @@ public class Book {
     private int copiesSold;
 
     private double price;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id")
+    @JsonBackReference
+    private Author bookAuthor;
 
     public Book() {
     }
