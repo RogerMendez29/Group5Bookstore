@@ -179,9 +179,6 @@ VALUES
   (2, 2),
   (3, 3);
 
- UPDATE Book_StoreDB.book
- INNER JOIN Book_StoreDB.author ON CONCAT(Book_StoreDB.author.first_Name, ' ', Book_StoreDB.author.last_Name) = Book_StoreDB.book.author
- SET Book_StoreDB.book.author_id = Book_StoreDB.author.id;
 
 
 
