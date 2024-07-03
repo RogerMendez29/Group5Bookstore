@@ -49,7 +49,7 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedComment);
     }
 
-    @GetMapping("/{bookId}")
+    @GetMapping("/{bookId}") //looks up comments associated with certain book ID
     public ResponseEntity<List<Comment>> getComments(@PathVariable int bookId) {
 
         List<Comment> comments = commentService.getCommentByBookId(bookId);
