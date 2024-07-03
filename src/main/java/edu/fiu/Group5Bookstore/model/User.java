@@ -27,7 +27,7 @@ public class User {
     @Column(name = "Username")
     private String username;
     @Column(name = "Password")
-    //@JsonIgnore
+    @JsonIgnore
     private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
