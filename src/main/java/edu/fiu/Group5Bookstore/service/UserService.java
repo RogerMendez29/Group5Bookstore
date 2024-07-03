@@ -8,6 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class UserService {
 
@@ -21,4 +24,17 @@ public class UserService {
         }
         return foundUser;
     }
+
+    public User saveUser(User user) {
+        return userRepository.save(user);
+    }
+
+    public User getUserByID(Integer id){
+        return userRepository.findByid(id);
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
 }
