@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.InputMismatchException;
 import java.util.List;
 @RestController
 @RequestMapping("/api/book")
@@ -39,6 +40,7 @@ public class BookController {
 
     @GetMapping("/genre/{genre}")
     public ResponseEntity<List<Book>> getBookByGenre(@PathVariable String genre) {
+
         List<Book> byGenre = bookService.getBookByGenre(genre);
         return new ResponseEntity<>(byGenre, HttpStatus.OK);
     }
@@ -67,9 +69,17 @@ public class BookController {
     @PatchMapping("/discount")
     public ResponseEntity<?> applyDiscountByPublisher(@RequestBody BookDiscountPatchDTO bookDiscountPatchDTO)
     {
-        bookService.applyDiscount(bookDiscountPatchDTO.getPublisher(), bookDiscountPatchDTO.getDiscount());
-        String returnMessage = (bookDiscountPatchDTO.getDiscount() * 100) + "% discount was applied to " + bookDiscountPatchDTO.getPublisher() + "'s books.";
-        return new ResponseEntity<>(returnMessage,HttpStatus.OK);
+        try {
+            if(bookDiscountPatchDTO.getDiscount() >= .95 || bookDiscountPatchDTO.getDiscount() <= 0)
+                throw new InputMismatchException();
+            bookService.applyDiscount(bookDiscountPatchDTO.getPublisher(), bookDiscountPatchDTO.getDiscount());
+            String returnMessage = (bookDiscountPatchDTO.getDiscount() * 100) + "% discount was applied to " + bookDiscountPatchDTO.getPublisher() + "'s books.";
+            return new ResponseEntity<>(returnMessage, HttpStatus.OK);
+        }
+        catch (InputMismatchException e) {
+            String returnMessage = "The discount applied must be in the range (0.0,0.95) exclusive.";
+            return new ResponseEntity<>(returnMessage, HttpStatus.UNPROCESSABLE_ENTITY);
+        }
     }
 
 
