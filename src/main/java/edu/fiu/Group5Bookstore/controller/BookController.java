@@ -83,7 +83,7 @@ public class BookController {
         try {
             if(bookDiscountPatchDTO.getDiscount() >= .95 || bookDiscountPatchDTO.getDiscount() <= 0)
                 throw new InputMismatchException();
-            List<Book> publishers = bookService.getBookByGenre(bookDiscountPatchDTO.getPublisher());
+            List<Book> publishers = bookService.getBookByPublisher(bookDiscountPatchDTO.getPublisher());
             if (publishers.isEmpty())
                 return ResponseEntity.notFound().build();
             bookService.applyDiscount(bookDiscountPatchDTO.getPublisher(), bookDiscountPatchDTO.getDiscount());
