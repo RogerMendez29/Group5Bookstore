@@ -33,7 +33,7 @@ public class CartService {
         double subtotal = 0.0;
 
         for ( CartItem item :list) {
-           subtotal += item.getTotalPrice() * item.getQuantity();
+           subtotal += item.getTotalPrice();
         }
         return subtotal;
     }
