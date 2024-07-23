@@ -3,7 +3,9 @@ package edu.fiu.Group5Bookstore.controller;
 import edu.fiu.Group5Bookstore.DTOs.CartItemPostDTO;
 import edu.fiu.Group5Bookstore.model.Book;
 import edu.fiu.Group5Bookstore.model.CartItem;
+import edu.fiu.Group5Bookstore.model.CreditCard;
 import edu.fiu.Group5Bookstore.model.User;
+import edu.fiu.Group5Bookstore.repository.UserRepository;
 import edu.fiu.Group5Bookstore.service.BookService;
 import edu.fiu.Group5Bookstore.service.CartService;
 import edu.fiu.Group5Bookstore.service.UserService;
@@ -20,29 +22,21 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
+    private final UserRepository userRepository;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService,
+                          UserRepository userRepository) {
         this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     @PostMapping("/createUser")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public void createUser(@RequestBody User user) {
         User newUser = userService.saveUser(user);
-        //return new ResponseEntity<User>(newUser, HttpStatus.OK);
-        return ResponseEntity.ok(newUser);
     }
 
-    /*
-    @GetMapping("/getUser")
-    public ResponseEntity<User> getUser(@RequestBody String username) {
-        User user = new User();
-        return ResponseEntity.ok(user);
-    }
-    */
-
-
-    @GetMapping("/getUser/username/{username}")
+    @GetMapping("/getUser/{username}")
     public ResponseEntity<User> getUserUsername(@PathVariable String username) {
         List<User> users = userService.getAllUsers();
         User user = new User();
@@ -54,15 +48,9 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @GetMapping("/getUser/{id}")
-    public ResponseEntity<User> getUserID(@PathVariable Integer id) {
-        User user = userService.getUserByID(id);
-        return ResponseEntity.ok(user);
-    }
-
-    @GetMapping("/getUsers")
-    public List<User> getUsers(@RequestBody String username) {
-        return userService.getAllUsers();
+    @PutMapping("/updateUser/{username}")
+    public void updateUser(@PathVariable String username, @RequestBody User user) {
+        userService.updateUser(username, user);
     }
 
 }

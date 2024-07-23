@@ -1,9 +1,12 @@
 package edu.fiu.Group5Bookstore.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
+import javax.swing.text.View;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +20,6 @@ import java.util.List;
 @Table(name = "USER")
 public class User {
 
-
-
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +28,7 @@ public class User {
     @Column(name = "Username")
     private String username;
     @Column(name = "Password")
-    @JsonIgnore
+    //@JsonIgnore
     private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -40,10 +41,8 @@ public class User {
     @Column(name = "Address")
     private String address;
 
-    public String getUsername()
-    {
-        return username;
-    }
+    @ManyToOne
+    private CreditCard creditCard;
 
     public User() {
     }
@@ -54,6 +53,7 @@ public class User {
         this.password = password;
         this.cartItems = cartItems;
     }
+
 
     public User(int id, String username, String password, List<CartItem> cartItems, String name, String email, String address) {
         this.id = id;
