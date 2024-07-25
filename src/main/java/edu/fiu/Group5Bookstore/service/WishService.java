@@ -56,7 +56,7 @@ public class WishService {
         verifyBookId(wi);
 
         if (wishItemRepository.findByBookIdAndWishListID(wi.getBook().getId(), wi.getWishListID()) != null) {
-            throw new GeneralBadRequestException("Book with ID " + wi.getBook().getId() + " is already in whitelist " + wi.getWishListID() + ".", HttpStatus.BAD_REQUEST);
+            throw new GeneralBadRequestException("Book with ID " + wi.getBook().getId() + " is already in wishlist " + wi.getWishListID() + ".", HttpStatus.BAD_REQUEST);
         }
 
         wishItemRepository.save(wi);
@@ -68,7 +68,7 @@ public class WishService {
         WishItem wi2 = wishItemRepository.findByBookIdAndWishListID(wi.getBook().getId(), wi.getWishListID());
 
         if (wi2 == null) {
-            throw new GeneralBadRequestException("Book with ID " + wi.getBook().getId() + " is not in whitelist " + wi.getWishListID() + ".", HttpStatus.BAD_REQUEST);
+            throw new GeneralBadRequestException("Book with ID " + wi.getBook().getId() + " is not in wishlist " + wi.getWishListID() + ".", HttpStatus.BAD_REQUEST);
         }
 
         wishItemRepository.delete(wi2);
