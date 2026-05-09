@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simple Counter</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f0f2f5;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 48px 40px;
+      text-align: center;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+      width: 340px;
+    }
+
+    h1 {
+      font-size: 18px;
+      color: #555;
+      margin-bottom: 16px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    #count {
+      font-size: 80px;
+      font-weight: 700;
+      color: #1a1a2e;
+      line-height: 1;
+      margin-bottom: 40px;
+      transition: transform 0.1s ease;
+    }
+
+    #count.bump {
+      transform: scale(1.15);
+    }
+
+    .buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    button {
+      flex: 1;
+      padding: 14px 0;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.1s ease, filter 0.1s ease;
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+
+    #btn1 { background: #4f46e5; color: #fff; }
+    #btn2 { background: #0ea5e9; color: #fff; }
+    #btn3 { background: #10b981; color: #fff; }
+
+    button:hover { filter: brightness(1.1); }
+
+    .reset {
+      margin-top: 24px;
+    }
+
+    #resetBtn {
+      background: #f1f1f1;
+      color: #666;
+      font-size: 13px;
+      padding: 10px 24px;
+      flex: none;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Counter</h1>
+    <div id="count">0</div>
+    <div class="buttons">
+      <button id="btn1">+1</button>
+      <button id="btn2">+1</button>
+      <button id="btn3">+1</button>
+    </div>
+    <div class="buttons reset">
+      <button id="resetBtn">Reset</button>
+    </div>
+  </div>
+
+  <script>
+    let count = 0;
+    const display = document.getElementById('count');
+
+    function increment() {
+      count++;
+      display.textContent = count;
+      display.classList.remove('bump');
+      void display.offsetWidth; // reflow to restart animation
+      display.classList.add('bump');
+    }
+
+    document.getElementById('btn1').addEventListener('click', increment);
+    document.getElementById('btn2').addEventListener('click', increment);
+    document.getElementById('btn3').addEventListener('click', increment);
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      count = 0;
+      display.textContent = 0;
+    });
+  </script>
+</body>
+</html>
